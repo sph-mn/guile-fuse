@@ -1,0 +1,4 @@
+exports {
+  global: init_guile_fuse;
+  local: *;
+};
