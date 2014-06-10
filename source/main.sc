@@ -255,7 +255,8 @@
   (define-scm-result
     (scm-call-3 gf-scm-readdir (scm-from-locale-string path) (scm-from-int offset) file-handle))
   (if (scm-is-string scm-result)
-    (begin (add-dir-entry buf (scm->locale-string scm-result) 0 (+ 1 offset)) (return 0))
+    (begin (define file-name char* (scm->locale-string scm-result))
+      (add-dir-entry buf file-name 0 (+ 1 offset)) (free file-name) (return 0))
     (default-return -1)))
 
 (define (gf-readdir-without-offset path buf add-dir-entry offset file-info)
@@ -265,8 +266,8 @@
   (if (scm-is-true (scm-list? scm-result))
     (begin
       (while (not (scm-is-null scm-result))
-        (add-dir-entry buf (scm->locale-string (scm-first scm-result)) 0 0)
-        (set scm-result (scm-tail scm-result)))
+        (define file-name char* (scm->locale-string (scm-first scm-result)))
+        (add-dir-entry buf file-name 0 0) (free file-name) (set scm-result (scm-tail scm-result)))
       (return 0))
     (default-return -1)))
 
@@ -419,14 +420,14 @@
     (begin (set c-arguments (malloc (* (sizeof pointer) arguments-count)))
       (set c-arguments-p c-arguments)
       (while (not (scm-is-null arguments))
-        (set (deref c-arguments-p) (scm-to-locale-string (scm-first arguments)))
+        (set (deref c-arguments-p) (scm->locale-string (scm-first arguments)))
         (increment-one c-arguments-p) (set arguments (scm-tail arguments))))
     (set c-arguments 0))
   (define result SCM
     (scm-from-int (fuse-main arguments-count c-arguments (address-of fuse-operations) 0)))
   (if arguments-count
     (begin (decrement-one c-arguments-p)
-      (while (> c-arguments-p c-arguments) (free (deref c-arguments-p))
+      (while (>= c-arguments-p c-arguments) (free (deref c-arguments-p))
         (decrement-one c-arguments-p))
       (free c-arguments)))
   (return result))
