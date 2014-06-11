@@ -16,9 +16,9 @@
     (if (< (file-handles-pos-index) file-handles-max) (increment-one file-handles-pos)
       (set file-handles-pos file-handles))
     (decrement-one count))
-  (define result SCM*)
-  (if count (set result file-handles-pos)
-    (begin (debug-log "%s" "maximum number of open files has been reached") (set result 0)))
+  (define result SCM*
+    (if* count file-handles-pos
+      (begin (debug-log "%s" "maximum number of open files has been reached") (convert-type 0 SCM*))))
   (pthread-mutex-unlock (address-of file-handle-next-mutex)) (return result))
 
 (define-macro (file-handle-set handle file-info)
