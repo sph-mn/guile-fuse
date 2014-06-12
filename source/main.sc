@@ -9,7 +9,6 @@
 (include "sph.c")
 (include "file-handles.c")
 (define-macro (mode->perm mode) (bit-and mode 511))
-;stores symbolic names for file types - used in gf-alist-to-stat
 (define-macro (define-scm-result arg) (define scm-result SCM arg))
 
 (define-macro (default-return default-error)
