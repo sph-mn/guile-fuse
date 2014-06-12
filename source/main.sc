@@ -260,14 +260,16 @@
     (default-return -1)))
 
 (define (gf-readdir-without-offset path buf add-dir-entry offset file-info)
-  (b32-s (const char*) b0* fuse-fill-dir-t off-t (struct fuse-file-info*)) file-handle-init
+  (b32-s (const char*) b0* fuse-fill-dir-t off-t (struct fuse-file-info*))
+  file-handle-init
   (define-scm-result
     (scm-call-2 gf-scm-readdir-without-offset (scm-from-locale-string path) file-handle))
   (if (scm-is-true (scm-list? scm-result))
     (begin
       (while (not (scm-is-null scm-result))
         (define file-name char* (scm->locale-string (scm-first scm-result)))
-        (add-dir-entry buf file-name 0 0) (free file-name) (set scm-result (scm-tail scm-result)))
+        (if (add-dir-entry buf file-name 0 0) (begin (free file-name) break))
+        (free file-name) (set scm-result (scm-tail scm-result)))
       (return 0))
     (default-return -1)))
 
@@ -282,13 +284,13 @@
   file-handle-init
   (define-scm-result (scm-call-2 gf-scm-release (scm-from-locale-string path) file-handle))
   (if (and (scm-is-bool scm-result) (scm-is-true scm-result))
-    (file-handle-remove-if file-info file-handle))
+    (file-handle-remove file-info file-handle))
   (default-return -1))
 
 (define (gf-releasedir path file-info) (b32-s (const char*) (struct fuse-file-info*))
   file-handle-init
   (define-scm-result (scm-call-2 gf-scm-releasedir (scm-from-locale-string path) file-handle))
-  (if (scm-is-true scm-result) (file-handle-remove-if file-info file-handle)) (default-return -1))
+  (if (scm-is-true scm-result) (file-handle-remove file-info file-handle)) (default-return -1))
 
 (define (gf-removexattr path name) (b32-s (const char*) (const char*))
   (define-scm-result
@@ -438,5 +440,5 @@
   set-file-type-symbols mode->perm
   define-scm-result default-return
   file-handle-set file-handle-init
-  file-handle-add-if file-handle-remove-if
+  file-handle-add-if file-handle-remove
   set-stat-ele-if-exists get-stat-type set-stat-info-from-alist getattr-process-result)
