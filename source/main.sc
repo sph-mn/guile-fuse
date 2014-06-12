@@ -14,7 +14,7 @@
 
 (define-macro (default-return default-error)
   ;if scm-val is true, return 0
-  ;if scm-val is an integer, negate and return it
+  ;if scm-val is an integer, convert and return it
   ;if scm-val is false return default-error
   (return
     (if* (scm-is-integer scm-result) (scm->int32 scm-result)
