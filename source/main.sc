@@ -55,6 +55,7 @@
 
 ;the filesystem procedures call a scheme procedure and return a number indicating status
 
+
 (define file-regular SCM
   file-directory SCM
   file-symlink SCM
@@ -146,7 +147,7 @@
 
 (define (gf-fgetattr path stat-info file-info)
   (b32-s (const char*) (struct stat*) (struct fuse-file-info*)) file-handle-init
-  (define-scm-result (scm_call_2 gf-scm-fgetattr (scm-from-locale-string path) file_handle))
+  (define-scm-result (scm-call-2 gf-scm-fgetattr (scm-from-locale-string path) file_handle))
   (getattr-process-result))
 
 (define (gf-flush path file-info) (b32-s (const char*) (struct fuse-file-info*))
@@ -259,16 +260,15 @@
     (default-return -1)))
 
 (define (gf-readdir-without-offset path buf add-dir-entry offset file-info)
-  (b32-s (const char*) b0* fuse-fill-dir-t off-t (struct fuse-file-info*))
-  file-handle-init
+  (b32-s (const char*) b0* fuse-fill-dir-t off-t (struct fuse-file-info*)) file-handle-init
   (define-scm-result
     (scm-call-2 gf-scm-readdir-without-offset (scm-from-locale-string path) file-handle))
   (if (scm-is-true (scm-list? scm-result))
     (begin
       (while (not (scm-is-null scm-result))
         (define file-name char* (scm->locale-string (scm-first scm-result)))
-        (if (add-dir-entry buf file-name 0 0) (begin (free file-name) break))
-        (free file-name) (set scm-result (scm-tail scm-result)))
+        (if (add-dir-entry buf file-name 0 0) (begin (free file-name) break)) (free file-name)
+        (set scm-result (scm-tail scm-result)))
       (return 0))
     (default-return -1)))
 
@@ -335,7 +335,7 @@
 (define (gf-unlink path) (b32-s (const char*))
   (define-scm-result (scm-call-1 gf-scm-unlink (scm-from-locale-string path))) (default-return -1))
 
-(define (gf-utimens path tv[2]) (b32-s (const char*) (const struct timespec))
+(define (gf-utimens path tv (2)) (b32-s (const char*) (const struct timespec))
   (define-scm-result
     (scm-call-5 gf-scm-utimens (scm-from-locale-string path)
       (scm-from-int (struct-ref (deref tv) tv-sec))
@@ -411,10 +411,10 @@
   (link-procedure rename gf-rename "gf-rename" gf-scm-rename)
   (link-procedure truncate gf-truncate "gf-truncate" gf-scm-truncate))
 
-(define (gf-start arguments) (SCM SCM)
+(define (gf-start arguments module) (SCM SCM SCM)
   ;(string ...):fuse-options -> integer
-  (define module SCM (scm-current-module)) (file-handles-init)
-  (set-file-type-symbols) (define-and-set-fuse-operations module)
+  (file-handles-init) (set-file-type-symbols)
+  (define-and-set-fuse-operations module)
   (define arguments-count int (scm->int (scm-length arguments))) (define c-arguments char**)
   (define c-arguments-p char**)
   (if arguments-count
@@ -433,7 +433,7 @@
       (free c-arguments)))
   (return result))
 
-(define (init-guile-fuse) b0 (scm-c-define-gsubr "primitive-gf-start" 1 0 1 gf-start))
+(define (init-guile-fuse) b0 (scm-c-define-gsubr "primitive-gf-start" 2 0 0 gf-start))
 
 (undefine-macro link-procedure link-procedures
   set-file-type-symbols mode->perm
