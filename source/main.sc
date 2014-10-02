@@ -6,8 +6,8 @@
 (define-macro _FILE_OFFSET_BITS 64)
 (define-macro FUSE-USE-VERSION 30)
 (includep "fuse.h")
-(include "sph.c")
-(include "file-handles.c")
+(include-sc "../extern/sph")
+(include-sc "file-handles")
 (define-macro (mode->perm mode) (bit-and mode 511))
 (define-macro (define-scm-result arg) (define scm-result SCM arg))
 
@@ -335,7 +335,7 @@
 (define (gf-unlink path) (b32-s (const char*))
   (define-scm-result (scm-call-1 gf-scm-unlink (scm-from-locale-string path))) (default-return -1))
 
-(define (gf-utimens path tv (2)) (b32-s (const char*) (const struct timespec))
+(define (gf-utimens path tv[2]) (b32-s (const char*) (const struct timespec))
   (define-scm-result
     (scm-call-5 gf-scm-utimens (scm-from-locale-string path)
       (scm-from-int (struct-ref (deref tv) tv-sec))
