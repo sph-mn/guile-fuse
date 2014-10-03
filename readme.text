@@ -1,0 +1,13 @@
+dependencies
+  guile
+  install dependencies
+    sph-sc
+    bash/dash
+installation
+  \##
+    ./exec/compile
+    su root
+    ./exec/install
+  or set the installation prefix (the default is /usr)
+  \##
+    ./exec/install /usr/local
