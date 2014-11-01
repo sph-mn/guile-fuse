@@ -1,5 +1,6 @@
 (library (fuse)
   (export
+    primitive-gf-start
     gf-start)
   (import
     (rnrs base)
