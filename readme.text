@@ -1,5 +1,6 @@
 dependencies
   guile
+  sph-lib
   install dependencies
     sph-sc
     bash/dash
