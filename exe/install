@@ -2,6 +2,6 @@
 !#
 
 (import (sph install))
-
-(install-cli-guile ("/usr/lib" "temp/libguile-fuse.so")
-  (path-lib-scheme "source/fuse.scm"))
+(install-cli-guile
+  ("/usr/lib" "temp/libguile-fuse.so")
+  (path-lib-scheme "source/scheme/fuse.scm"))

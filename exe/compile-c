@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+mkdir -p temp
+
+gcc -std=gnu99 -Wall -Werror -Wfatal-errors -o3 -shared -fpic \
+  $(guile-config compile) $(guile-config link) -lfuse -o temp/libguile-fuse.so \
+  source/c-precompiled/main.c -Wl,--version-script=other/shared-library-exports && chmod -R 755 temp

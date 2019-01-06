@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+mkdir -p source/c-precompiled
+sc source/sc/main.sc source/c-precompiled/main.c
+./exe/format-c -i source/c-precompiled/main.c

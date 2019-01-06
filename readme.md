@@ -1,10 +1,8 @@
 guile bindings to fuse - filesystems in userspace
 
-status: worked and tested quite heavily but the code is old and needs update. some things that need to be done:
-* sph-sc has been updated and the sc code uses old syntax
-* include a pre-compiled, formatted c version so sph-sc isnt necessary
+status: worked and tested quite heavily in the past but it needs to be tested again.
 
-see also  [fuse homepage](http://fuse.sourceforge.net/)
+see also [fuse homepage](http://fuse.sourceforge.net/)
 
 # features
 * supports almost all [fuse operations](http://fuse.sourceforge.net/doxygen/structfuse__operations.html), but not all fully. the only unsupported operations are: read-buf and write-buf (no idea how to make use of their possible benefits).
@@ -40,22 +38,18 @@ see also  [fuse homepage](http://fuse.sourceforge.net/)
 * run-time
   * [guile](https://www.gnu.org/software/guile) 2+
   * [fuse](http://fuse.sourceforge.net/)
-* compile
-  * sh
-  * gcc for the provided compile script
-  * [sph-sc](https://github.com/sph-mn/sph-sc)
+* quick build
+  * gcc and shell for the provided compile script
+* development build
+  * [sc](https://github.com/sph-mn/sph-sc)
+  * clang-format (part of cmake)
 
 ## installation
 ```
-./exec/compile
+./exe/compile-c
+./exe/install --help
 su root
-./exec/install
-```
-
-or set the installation prefix (the default is /usr)
-
-```
-./exec/install /usr/local
+./exe/install
 ```
 
 # installed files
