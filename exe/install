@@ -1,7 +1,8 @@
-#!/usr/bin/guile
+#!/usr/bin/env guile
 !#
 
 (import (sph install))
-(install-cli-guile
-  ("/usr/lib" "temp/libguile-fuse.so")
-  (path-lib-scheme "source/scheme/fuse.scm"))
+
+(install-cli
+  (system-libraries "temp/libguile-fuse.so")
+  (guile-site-modules "source/scheme/fuse.scm"))
