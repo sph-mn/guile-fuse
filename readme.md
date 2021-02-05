@@ -14,7 +14,7 @@ see also [fuse homepage](http://fuse.sourceforge.net/)
 
 # example
 ```
-(import (fuse))
+(use-modules (fuse))
 
 (define (gf-getattr path)
   (cond
@@ -33,10 +33,15 @@ see also [fuse homepage](http://fuse.sourceforge.net/)
 (gf-start mount-path (list "-f"))
 ```
 
+you can also run another example, which mounts an example file system to /tmp/fuse-example:
+```
+guile other/example.com
+```
+
 # setup
 ## dependencies
 * run-time
-  * [guile](https://www.gnu.org/software/guile) 2+
+  * [guile](https://www.gnu.org/software/guile) >= 2
   * [fuse](http://fuse.sourceforge.net/)
 * quick build
   * gcc and shell for the provided compile script
@@ -52,7 +57,7 @@ su root
 ./exe/install
 ```
 
-# installed files
+installed files
 * /usr/lib/libguile-fuse.so
 * /usr/share/guile/site/fuse.scm
 

@@ -2,12 +2,12 @@
 !#
 
 ; this script mounts to "/tmp/fuse-example".
-; exit with Ctrl+C should unmount the filesystem.
-; - if you get "no such file or directory" and the filesystem is still mounted, umount the filesystem first
+; exiting with Ctrl+C should unmount the filesystem.
+; - if you get "no such file or directory" and the filesystem is still mounted, try to umount the target filesystem first
 ; - permission issues can be caused by wrong return values
 ; - the display of data read with "read" often depends on previously returned size values of getattr
 
-(import (fuse) (rnrs bytevectors))
+(use-modules (fuse) (rnrs bytevectors))
 (define (log . msg) (display msg) (newline))
 
 (define (gf-getattr path)
@@ -32,6 +32,6 @@
 (define (gf-opendir path) (log "opendir called") #t)
 (define (gf-truncate path offset) (log "truncate called") #t)
 
-(let ((mount-path (string-append (dirname (tmpnam)) "/fuse-example")))
+(let ((mount-path (string-append "/tmp/fuse-example")))
   (if (not (file-exists? mount-path)) (mkdir mount-path))
   (simple-format #t "mounting to ~A\n" mount-path) (gf-start mount-path (list "-f")))
