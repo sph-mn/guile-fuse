@@ -1,8 +1,9 @@
-#!/usr/bin/env guile
-!#
+#!/bin/sh -e
 
-(import (sph install))
+prefix="$1"
 
-(install-cli
-  (system-libraries "temp/libguile-fuse.so")
-  (guile-site-modules "source/scheme/fuse.scm"))
+mkdir -pm 755 "$prefix/usr/lib" "$prefix/usr/share/guile/site"
+cp "temp/libguile-fuse.so" "$prefix/usr/lib/libguile-fuse.so"
+chmod 644 /usr/lib/libguile-fuse.so
+cp "source/scheme/fuse.scm" "$prefix/usr/share/guile/site/fuse.scm"
+chmod 644 /usr/share/guile/site/fuse.scm

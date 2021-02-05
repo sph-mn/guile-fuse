@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+prefix="$1"
+
+mkdir -pm 755 "$prefix/usr/lib" "$prefix/usr/share/guile/site"
+ln -s "$PWD/temp/libguile-fuse.so" "$prefix/usr/lib/libguile-fuse.so"
+ln -s "$PWD/source/scheme/fuse.scm" "$prefix/usr/share/guile/site/fuse.scm"
