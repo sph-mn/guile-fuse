@@ -13,7 +13,7 @@ see also [fuse homepage](http://fuse.sourceforge.net/)
 * operations where not all fuse arguments are passed: fsync fsyncdir init ioctl listxattr lock mknod poll readlink (just not implemented)
 
 # example
-```
+~~~
 (use-modules (fuse))
 
 (define (gf-getattr path)
@@ -31,12 +31,12 @@ see also [fuse homepage](http://fuse.sourceforge.net/)
   (bytevector-length data))
 
 (gf-start mount-path (list "-f"))
-```
+~~~
 
 you can also run another example, which mounts an example file system to /tmp/fuse-example:
-```
+~~~
 guile other/example.com
-```
+~~~
 
 # setup
 ## dependencies
@@ -50,16 +50,18 @@ guile other/example.com
   * clang-format (part of cmake)
 
 ## installation
-```
+~~~
 ./exe/compile-c
-./exe/install --help
 su root
 ./exe/install
-```
+~~~
 
 installed files
 * /usr/lib/libguile-fuse.so
 * /usr/share/guile/site/fuse.scm
+
+`exe/install` supports one argument, a target prefix to prepend to all installed paths.
+there is also `exe/install-symlink`.
 
 # possible enhancements
 * maybe another way to bind procedures to fuse operations. perhaps a hashtable or procedure with keyword arguments
